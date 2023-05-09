@@ -20,13 +20,12 @@ app.get("/", (req, res) => {
 
     var day = today.toLocaleDateString('en-US', options)
 
-  res.render("list", { kindOfDay: day, newListItem: items });
+  res.render("list", { kindOfDay: day, newListItem: item });
 });
 
 app.post('/', (req, res) => {
     var item = req.body.newItem
-    items.push(item)
-    
+
     res.redirect('/')
 })
 

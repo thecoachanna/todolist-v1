@@ -7,16 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-do List</title>
 </head>
-<!-- <style>
-    li {
-        list-style-type: none;
-    }
-</style> -->
+
 <body>
     <h1><%= kindOfDay %></h1>
     <ul>
+        <li>Buy Food</li>
+        <li>Cook Food</li>
+        <li>Eat Food</li>
         <% newListItem.map(newItem => { %>
-            <li> <%=newItem%> </li>
+            return (
+                <li> <%=newItem%> </li>
+            )
        <% }) %>
     </ul>
 

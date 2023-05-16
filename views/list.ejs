@@ -5,10 +5,10 @@
     
     <div class="box">
         
-            <% newListItem.map(newItem => { %>
+            <% newListItem.forEach(function(newItem) { %>
                 <div class="item">
                     <input type="checkbox">
-                    <p> <%=newItem%> </p>
+                    <p> <%=newItem.name%> </p>
                 </div> 
            <% }) %>
 

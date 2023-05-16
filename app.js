@@ -37,7 +37,13 @@ const item3 = new Item({
 });
 
 const defaultItems = [item1, item2, item3];
-const workItems = [];
+
+const listSchema = {
+  name: String,
+  items: [itemSchema],
+};
+
+const List = mongoose.model("List", listSchema);
 
 app.get("/", (req, res) => {
   // const day = date.getDate();
@@ -62,6 +68,32 @@ app.get("/", (req, res) => {
     });
 });
 
+app.get("/:customListName", (req, res) => {
+  const customListName = req.params.customListName;
+
+  List.findOne({ name: customListName })
+    .then(function (foundList) {
+      if (!foundList) {
+        // create new list
+        const list = new List({
+          name: customListName,
+          items: defaultItems,
+        });
+        list.save();
+        res.redirect(`/${customListName}`);
+      } else {
+        // show existing list
+        res.render("list", {
+          listTitle: foundList.name,
+          newListItem: foundList.items,
+        });
+      }
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+});
+
 // Post route for new to do
 app.post("/", (req, res) => {
   const itemName = req.body.newItem;
@@ -74,11 +106,11 @@ app.post("/", (req, res) => {
 
 // Delete route for to do's
 app.post("/delete", (req, res) => {
-    const checkedItemId = req.body.checkbox
-    Item.findByIdAndRemove(checkedItemId).then(function () {
-        console.log(`Removed ${checkedItemId}`)
-    })
-    res.redirect('/')
+  const checkedItemId = req.body.checkbox;
+  Item.findByIdAndRemove(checkedItemId).then(function () {
+    console.log(`Removed ${checkedItemId}`);
+  });
+  res.redirect("/");
 });
 
 app.get("/work", (req, res) => {

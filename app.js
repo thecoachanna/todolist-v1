@@ -25,15 +25,15 @@ const Item = mongoose.model("Item", itemSchema);
 
 // Mongoose Document
 const item1 = new Item({
-  name: "Workout",
+  name: "Welcome to your to do list!",
 });
 
 const item2 = new Item({
-  name: "Self-study",
+  name: "Hit the + button to add a new item.",
 });
 
 const item3 = new Item({
-  name: "TCM",
+  name: "<-- Hit this to delete an item.",
 });
 
 const defaultItems = [item1, item2, item3];
@@ -42,33 +42,43 @@ const workItems = [];
 app.get("/", (req, res) => {
   // const day = date.getDate();
 
-  Item.find({}).then(function (foundItems) {
+  Item.find({})
+    .then(function (foundItems) {
       if (foundItems.length === 0) {
-        Item.insertMany(defaultItems).then(function () {
+        Item.insertMany(defaultItems)
+          .then(function () {
             console.log("Successfully saved default items to DB");
-          }).catch(function (err) {
+          })
+          .catch(function (err) {
             console.log(err);
           });
-          res.redirect('/')
+        res.redirect("/");
       } else {
         res.render("list", { listTitle: "Today", newListItem: foundItems });
       }
-    }).catch(function (err) {
+    })
+    .catch(function (err) {
       console.log(err);
     });
 });
 
+// Post route for new to do
 app.post("/", (req, res) => {
   const itemName = req.body.newItem;
-
   const item = new Item({
     name: itemName,
   });
-    
-    item.save()
-    
-    res.redirect('/')
+  item.save();
+  res.redirect("/");
+});
 
+// Delete route for to do's
+app.post("/delete", (req, res) => {
+    const checkedItemId = req.body.checkbox
+    Item.findByIdAndRemove(checkedItemId).then(function () {
+        console.log(`Removed ${checkedItemId}`)
+    })
+    res.redirect('/')
 });
 
 app.get("/work", (req, res) => {

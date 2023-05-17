@@ -3,6 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/todolistDB'
+import dotenv from 'dotenv'
+dotenv.config()
 const _ = require("lodash");
 
 const app = express();

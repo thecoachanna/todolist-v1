@@ -13,9 +13,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Database Connection
-mongoose.connect(dbUrl, {
-  useNewUrlParser: true,
-});
+// mongoose.connect(dbUrl, {
+//   useNewUrlParser: true,
+// });
+
+const connectDatabase = async () => {
+  try {
+    await mongoose.connect(dbUrl, {
+      useNewUrlParser: true,
+    });
+    console.log("connected to database");
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+connectDatabase();
 
 // Mongoose Schemas
 const itemsSchema = Schema({ name: String });
